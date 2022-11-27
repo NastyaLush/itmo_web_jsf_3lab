@@ -1,5 +1,6 @@
 # web3itmo
-![alt text](https://se.ifmo.ru/courses/web?p_p_id=iapsportletlab8_WAR_iapsportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage?1669557852851)
+![image](https://user-images.githubusercontent.com/95052885/204139518-3d649ae6-6484-4f90-8456-019a44168ca5.png)
+
 
 Разработать приложение на базе `JavaServer Faces Framework`, которое осуществляет проверку попадания точки в заданную область на координатной плоскости.
 
