@@ -3,9 +3,9 @@
 
 let height = 350,
     width = 350,
-    margin = 0,
-    radius =0;
-let x,y,r;
+    margin = 30,
+    radius = 0;
+let x, y, r;
 
 const xAxisLength = width - 2 * margin;
 const yAxisLength = height - 2 * margin;
@@ -45,9 +45,9 @@ svg.append("g")
     .call(yAxis);
 //круг
 
-const sizeofsquare = xAxisLength / 10;
+const sizeOfSquare = xAxisLength / 10;
 const arcGenerator = d3.arc()
-    .outerRadius(sizeofsquare * radius / 2)
+    .outerRadius(sizeOfSquare * radius / 2)
     .innerRadius(0)
     .startAngle(0)
     .endAngle(Math.PI / 2);
@@ -58,19 +58,18 @@ const sector = svg.append("path")
     .attr("d", arcGenerator());
 //прямоугольник
 const rect = svg.append("rect")
-    .style("fill", "none")
     .attr("class", "rect")
     .attr("id", "rect")
     .attr("x", 175)
     .attr("y", 175)
-    .attr("width", sizeofsquare * radius / 2)
-    .attr("height", sizeofsquare * radius);
-let x1 = 175 - sizeofsquare * radius;
-let y2 = 175 + sizeofsquare * radius;
+    .attr("width", sizeOfSquare * radius / 2)
+    .attr("height", sizeOfSquare * radius);
+let x1 = 175 - sizeOfSquare * radius;
+let y2 = 175 + sizeOfSquare * radius;
 //треугольник
 const triangle = svg.append("polygon")
-    .style("fill", "none")
     .attr("class", "triangle")
+    .attr("id", "triangle")
     .attr("points", x1 + ",175" + " 175,175 " + "175," + y2);
 
 
@@ -105,16 +104,16 @@ d3.selectAll("g.y-axis g.tick")
     .attr("y2", 0);
 
 
-function changeSize(){
+function changeSize() {
     radius = document.getElementById("form:r_hinput").value
-    x1 = 175 - sizeofsquare * radius;
-    y2 = 175 + sizeofsquare * radius;
-    rect.attr("width", sizeofsquare * radius / 2)
-        .attr("height", sizeofsquare * radius);
+    x1 = 175 - sizeOfSquare * radius;
+    y2 = 175 + sizeOfSquare * radius;
+    rect.attr("width", sizeOfSquare * radius / 2)
+        .attr("height", sizeOfSquare * radius);
     triangle.attr("points", x1 + ",175" + " 175,175 " + "175," + y2);
     svg.selectAll("path.sector").remove()
     const arcGenerator = d3.arc()
-        .outerRadius(sizeofsquare * radius / 2)
+        .outerRadius(sizeOfSquare * radius / 2)
         .innerRadius(0)
         .startAngle(0)
         .endAngle(Math.PI / 2);
@@ -124,19 +123,27 @@ function changeSize(){
         .attr("transform", "translate(175,175)")
         .attr("d", arcGenerator());
 }
-document.querySelector(".graph").addEventListener(("click"), (event) =>{
-    let margin = window.getComputedStyle(document.querySelector('body')).margin.slice(0,-2)
+
+document.querySelector(".graph").addEventListener(("click"), (event) => {
+    let marginOfGraph = window.getComputedStyle(document.querySelector('body')).margin.slice(0, -2)
     // console.log(margin)
-    x = event.clientX-margin;
-    y = event.clientY-margin;
-    let newx= (x-175)/(sizeofsquare);
-    let newy = (175-y)/(sizeofsquare);
-    r  = document.getElementById("form:r_hinput").value
-    if(r <2 || r>5){
+    x = event.clientX - marginOfGraph;
+    y = event.clientY - marginOfGraph;
+    let newx = (x - 175) / (sizeOfSquare);
+    let newy = (175 - y) / (sizeOfSquare);
+    console.log("sizeOfSquare: " + sizeOfSquare)
+    console.log("marginOfGraph: " + marginOfGraph)
+    console.log("margin: " + margin)
+    console.log("y: " + y)
+
+    console.log("ddddd")
+
+    r = document.getElementById("form:r_hinput").value
+    if (r < 2 || r > 5) {
         new Toast({
             title: false,
             text: 'r must be between 2 and 5',
-            theme: 'info',
+            theme: 'danger',
             autohide: true,
             interval: 10000
         });
@@ -161,26 +168,21 @@ document.querySelector(".graph").addEventListener(("click"), (event) =>{
     )
 
 })
-function setDots(){
-    var items = document.getElementById("table_data").childNodes
-    var lastchild = items[items.length-1].childNodes.forEach((e) =>{
 
-        if(e.childNodes[0].childNodes.length>0 && e.childNodes[0].classList.value =="result"){
+function setDots() {
+    let items = document.getElementById("table_data").childNodes
+    items[0].childNodes.forEach((e) => {
+
+        if (e.childNodes[0].childNodes.length > 0 && e.childNodes[0].classList.value == "result") {
             setDot(x, y, r, e.childNodes[0].childNodes[0])
         }
     });
 }
 
-function setDot(x, y, r, result){
-    let rad=2;
-    console.log(result.nodeValue)
-    console.log(result.textContent)
-    console.log(result.toString().trim())
-    console.log("HIT")
-    console.log("\"HIT\"")
+function setDot(x, y, r, result) {
+    let rad = 2;
 
-    if(result.textContent.trim() == "HIT"){
-        console.log("hittttt")
+    if (result.textContent.trim() == "HIT") {
         svg.append("circle")
             .attr("class", "dot")
             .attr("cx", x)
@@ -193,4 +195,4 @@ function setDot(x, y, r, result){
             .attr("cy", y)
             .attr("r", rad);
     }
- }
+}

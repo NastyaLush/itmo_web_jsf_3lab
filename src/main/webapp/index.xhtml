@@ -6,22 +6,24 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>web 3.0</title>
-    <h:outputStylesheet library="src" name="css/graph1.css"></h:outputStylesheet>
-    <h:outputStylesheet library="src" name="css/index.css"></h:outputStylesheet>
-    <h:outputStylesheet library="src" name="css/main2.css"></h:outputStylesheet>
+    <link rel="stylesheet" href="resources/src/css/index.css"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@800&amp;display=swap" rel="stylesheet"/>
 
 </h:head>
 <h:body>
     <header id="head">
-        <h1>Lushnikova Anastasia</h1>
-        <h1>Opton: 6219678</h1>
+        <h1 id="name">Lushnikova Anastasia</h1>
+        <h1 id="option">Option: 6219678</h1>
     </header>
     <div id="clock"></div>
 
-    <a href="./main.xhtml">Main Page</a>
+    <a id="main_url" href="./main.xhtml">Main Page</a>
+    <div class="fog"><div></div></div>
 
-    <h:outputScript library="src"  name="js/clocks.js"/>
-    <h:outputScript library="src"  name="js/graph34.js"/>
+
+    <h:outputScript library="src" name="js/clocks.js"/>
 </h:body>
 
 </html>

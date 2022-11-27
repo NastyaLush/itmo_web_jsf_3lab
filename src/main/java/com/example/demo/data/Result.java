@@ -1,16 +1,10 @@
-package com.example.demo;
-
-
-
-
+package com.example.demo.data;
 
 import jakarta.persistence.*;
-
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Date;
 
 @Named("result")
 @SessionScoped
@@ -77,15 +71,15 @@ public class Result implements Serializable {
 
 
     public void setX(Double x) {
-        this.x = x;
+        this.x = roundTo3(x);
     }
 
     public void setY(Double y) {
-        this.y = y;
+        this.y = roundTo3(y);
     }
 
     public void setR(Double r) {
-        this.r = r;
+        this.r = roundTo3(r);
     }
 
     public void setResultHit(ResultHit resultHit) {
@@ -100,6 +94,10 @@ public class Result implements Serializable {
         this.timeScript = timeScript;
     }
 
+    private final double roundTo3(Double x) {
+        return Math.floor(x * 1000) / 1000;
+    }
+
     @Override
     public String toString() {
         return "Result{" +
@@ -111,4 +109,5 @@ public class Result implements Serializable {
                 ", timeScript=" + timeScript +
                 '}';
     }
+
 }

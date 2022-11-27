@@ -5,10 +5,10 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <h:outputStylesheet library="src" name="css/graph1.css"/>
-    <link rel="stylesheet" href="resources/src/css/main2.css"/>
+    <h:outputStylesheet library="src" name="css/graph.css"/>
+    <link rel="stylesheet" href="resources/src/css/main.css"/>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="resources/src/css/graph1.css"/>
+    <link rel="stylesheet" href="resources/src/css/graph.css"/>
     <link href="resources/src/css/toast.min.css" rel="stylesheet"/>
     <script src="resources/src/js/toast.min.js"></script>
 
@@ -20,21 +20,23 @@
         <div class="labels_x">
             <label>Change X:</label>
             <p:inputNumber inputStyleClass="x" name="x" id="x" value="#{result.x}" decimalSeparator="." required="true"
-                           validatorMessage="x is not between the expected values of -5 and 5"
-                           requiredMessage="x is required" placeholder="from -5 till 5">
+                           validatorMessage=" x is not between the expected values of -5 and 5"
+                           requiredMessage=" x is required" placeholder="from -5 till 5">
                 <f:validateDoubleRange minimum="-5" maximum="5"/>
             </p:inputNumber>
+            <br/>
             <h:message errorClass="error-label" for="x"/>
 
-            <p:slider for="x" minValue="-5" maxValue="5" step="0.1"/>
+            <p:slider styleClass="slider" for="x" minValue="-5" maxValue="5" step="0.1"/>
         </div>
         <div class="labels_y" id="y-group">
             <label for="y">Change Y:</label>
             <p:inputNumber inputStyleClass="y" name="y" id="y" value="#{result.y}" decimalSeparator="." required="true"
-                           validatorMessage="y is not between the expected values of -5 and 3"
-                           requiredMessage="y is required" placeholder="from -5 till 3">
+                           validatorMessage=" y is not between the expected values of -5 and 3"
+                           requiredMessage=" y is required" placeholder="from -5 till 3">
                 <f:validateDoubleRange minimum="-5" maximum="3"/>
             </p:inputNumber>
+            <br/>
             <h:message errorClass="error-label" for="y"/>
         </div>
 
@@ -42,22 +44,25 @@
             <label for="r">Change R:</label>
             <p:inputNumber inputStyleClass="r" name="r" id="r" value="#{result.r}" decimalSeparator="."
                            onchange="changeSize()" required="true"
-                           validatorMessage="r is not between the expected values of -5 and 3"
-                           requiredMessage="r is required" placeholder="from 2 till 5">
+                           validatorMessage=" r is not between the expected values of -5 and 3"
+                           requiredMessage=" r is required" placeholder="from 2 till 5">
                 <f:validateDoubleRange minimum="2" maximum="5"/>
             </p:inputNumber>
+            <br/>
             <h:message errorClass="error-label" for="r"/>
         </div>
 
-        <p:commandButton ajax="true" type="submit" id="send" value="send" update="table"
+        <p:commandButton ajax="true" type="submit" id="send" styleClass="button" value="send" update="table @form"
                          action="#{userData.setResult(result)}"
         />
     </h:form>
-    <h:form>
-        <p:commandButton id="buttonGoToFirstPage" action="goToFirstPage" value="come back" type="submit"/>
-        <p:commandButton update="table" type="submit" id="reset" value="reset"
+    <h:form id="buttons">
+        <p:commandButton id="buttonGoToFirstPage" styleClass="button" action="goToFirstPage" value="come back" type="submit"/>
+        <p:commandButton update="table" type="submit" id="reset" styleClass="button" value="reset"
                          action="#{userData.clearBase()}"/>
     </h:form>
+
+
     <p:dataTable id="table" value="#{userData.results}" var="data"
                  styleClass="authorTable"
                  headerClass="authorTableHeader"
@@ -84,11 +89,12 @@
         </p:column>
 
     </p:dataTable>
+
     <p:remoteCommand name="setResultFromGraph" action="#{userData.setResultFromGraph()}" update="table"
                      process="@this" oncomplete="setDots()"/>
 
 
-    <script src="resources/src/js/graph34.js"/>
+    <script src="resources/src/js/graph.js"/>
 
 </h:body>
 </html>

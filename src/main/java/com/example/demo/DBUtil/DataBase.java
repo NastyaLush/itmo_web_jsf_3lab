@@ -1,6 +1,6 @@
-package com.example.demo;
+package com.example.demo.DBUtil;
 
-
+import com.example.demo.data.Result;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -8,12 +8,11 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-// спец. Java класс для инициализации Hibernate
 public class DataBase {
     private final SessionFactory sessionFactory;
 
     public DataBase() {
-        sessionFactory = EntityManagerUtil.getEntityManager();
+        sessionFactory = ConfigurationUtil.getEntityManager();
     }
 
 
@@ -30,13 +29,14 @@ public class DataBase {
         return query.list();
     }
 
-    public void clearBase(){
+    public void clearBase() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.createQuery("FROM Result ").list().forEach(e -> session.delete(e));
         session.getTransaction().commit();
     }
-    public List<Result>  getResults(){
+
+    public List<Result> getResults() {
         return new ArrayList<>();
     }
 

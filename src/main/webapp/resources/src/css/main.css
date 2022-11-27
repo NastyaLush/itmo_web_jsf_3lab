@@ -1,0 +1,72 @@
+
+.normal {
+
+}
+
+form:r_input.ui-state-error, form:x_input.ui-state-error, form:y_input.ui-state-error {
+    background-color: rgb(255 206 206 / 82%);
+    border-color: #c52f2f;
+    outline-color: rgb(243 127 127 / 82%);
+}
+
+form:r_input.ui-state-error:focus, form:x_input.ui-state-error:focus, form:y_input.ui-state-error:focus {
+    box-shadow: 0 0 0 4px rgba(218, 163, 163, 0.82);
+}
+
+input {
+    padding: 2px 2px 2px 2px;
+}
+
+.error-label {
+    color: rgb(234 86 86);
+}
+
+button.button {
+    width: 150px;
+    margin: 5px;
+}
+
+.slider {
+    width: 270px;
+    margin: 10px;
+}
+
+.dot, .error_dot {
+    fill: limegreen;
+    stroke: limegreen;
+}
+
+.error_dot {
+    fill: red;
+    stroke: red;
+}
+
+body {
+    display: grid;
+    justify-content: stretch;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+    "graph table"
+    "form table"
+    "buttons table"
+}
+
+#table {
+    display: grid;
+    grid-area: table;
+    height: 100vh;
+}
+
+#form {
+    display: grid;
+    grid-area: form;
+
+}
+
+#buttons {
+    display: grid;
+    grid-area: buttons;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 10px;
+}
