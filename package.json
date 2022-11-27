@@ -1,0 +1,8 @@
+{
+  "name": "web3.0",
+  "version": "3.8.1",
+  "dependencies": {
+    "just-validate": "^3.8.1"
+  },
+  "type": "module"
+}

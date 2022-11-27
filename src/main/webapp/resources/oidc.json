@@ -1,0 +1,16 @@
+{
+  "client-id" : "user",
+  "provider-url" : "http://localhost:8180/auth/realms/web3itmo",
+  "ssl-required" : "external",
+  "use-resource-role-mappings" : false,
+  "enable-cors" : true,
+  "cors-max-age" : 1000,
+  "cors-allowed-methods" : "POST, PUT, DELETE, GET",
+  "cors-exposed-headers" : "WWW-Authenticate, My-custom-exposed-Header",
+  "enable-basic-auth" : false,
+  "expose-token" : true,
+  "verify-token-audience" : true,
+  "credentials" : {
+    "secret" : "234234-234234-234234"
+  }
+}

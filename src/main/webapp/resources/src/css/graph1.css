@@ -1,0 +1,16 @@
+svg {
+    stroke: rgba(0, 0, 0, 0.99);
+    fill: none;
+    stroke-width: 0.5;
+}
+.axis text {
+    font: 10px Verdana;
+    fill: black;
+}
+.axis line {
+    fill: none;
+    stroke: steelblue;
+}
+.axis path{
+
+}
