@@ -1,2 +1,5 @@
 # Project exclude paths
 /target/
+/src/main/webapp/WEB-INF/oidc.json
+/src/main/webapp/resources/hibernate.cfg.xml
+/src/main/webapp/resources/oidc.json
