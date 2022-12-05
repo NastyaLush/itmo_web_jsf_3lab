@@ -2,7 +2,6 @@ package com.example.demo.Validation;
 
 import com.example.demo.data.Result;
 import com.example.demo.data.ResultHit;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -57,16 +57,16 @@
         />
     </h:form>
     <h:form id="buttons">
-        <p:commandButton id="buttonGoToFirstPage" styleClass="button" action="goToFirstPage" value="come back" type="submit"/>
+        <p:commandButton id="buttonGoToFirstPage" styleClass="button" action="goToFirstPage" value="come back"
+                         type="submit"/>
         <p:commandButton update="table" type="submit" id="reset" styleClass="button" value="reset"
                          action="#{userData.clearBase()}"/>
     </h:form>
 
 
     <p:dataTable id="table" value="#{userData.results}" var="data"
-                 styleClass="authorTable"
-                 headerClass="authorTableHeader"
-                 rowClasses="authorTableOddRow,authorTableEvenRow"
+                 headerClass="tableHeader"
+                 rowClasses="tableRow"
                  lazy="true"
     >
         <p:column headerText="X">
@@ -79,7 +79,7 @@
             <h:outputText value="#{data.r}"/>
         </p:column>
         <p:column headerText="RESULT">
-            <h:outputText styleClass="result" value="#{data.resultHit}"/>
+            <h:outputText id="result" styleClass="result" value="#{data.resultHit}"/>
         </p:column>
         <p:column headerText="DATE">
             <h:outputText value="#{data.date}"/>
@@ -93,8 +93,9 @@
     <p:remoteCommand name="setResultFromGraph" action="#{userData.setResultFromGraph()}" update="table"
                      process="@this" oncomplete="setDots()"/>
 
-
+    <div class="fog">
+        <div></div>
+    </div>
     <script src="resources/src/js/graph.js"/>
-
 </h:body>
 </html>

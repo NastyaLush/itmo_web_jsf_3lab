@@ -1,10 +1,8 @@
 package com.example.demo.main;
 
-
 import com.example.demo.DBUtil.DataBase;
 import com.example.demo.Validation.Validation;
 import com.example.demo.data.Result;
-
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -12,7 +10,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Named("userData")
 @ViewScoped

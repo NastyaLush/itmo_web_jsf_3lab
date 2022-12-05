@@ -14,8 +14,6 @@ public class DataBase {
     public DataBase() {
         sessionFactory = ConfigurationUtil.getEntityManager();
     }
-
-
     public void setResult(Result result) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();

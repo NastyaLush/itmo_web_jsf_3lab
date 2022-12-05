@@ -1,24 +1,10 @@
-
-.normal {
-
-}
-
-form:r_input.ui-state-error, form:x_input.ui-state-error, form:y_input.ui-state-error {
-    background-color: rgb(255 206 206 / 82%);
-    border-color: #c52f2f;
-    outline-color: rgb(243 127 127 / 82%);
-}
-
-form:r_input.ui-state-error:focus, form:x_input.ui-state-error:focus, form:y_input.ui-state-error:focus {
-    box-shadow: 0 0 0 4px rgba(218, 163, 163, 0.82);
-}
-
 input {
     padding: 2px 2px 2px 2px;
 }
 
 .error-label {
-    color: rgb(234 86 86);
+    color: rgb(173 0 0 / 96%);
+    padding: 10px;
 }
 
 button.button {
@@ -43,8 +29,10 @@ button.button {
 
 body {
     display: grid;
+    background: #272727;
     justify-content: stretch;
     grid-template-columns: 1fr 2fr;
+    margin: 0;
     grid-template-areas:
     "graph table"
     "form table"
@@ -69,4 +57,48 @@ body {
     grid-template-columns: 1fr 1fr;
     column-gap: 10px;
     row-gap: 10px;
+}
+
+body .ui-datatable thead th {
+    background: wheat;
+    border-width: 0;
+}
+
+body .ui-datatable .ui-datatable-data > tr {
+    background: #4E9CAF;
+    color: #f6faff;
+}
+
+.fog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    height: -webkit-fill-available;
+    overflow: hidden;
+    z-index: -1;
+    background-size: cover;
+    background-image: url("../pictures/fog.png");
+}
+
+label {
+    padding: 7px;
+    color: white;
+}
+
+body .ui-inputfield {
+    background: #ffffffba;
+}
+
+body .ui-button {
+    background: #58b6c9;
+}
+
+.labels_r {
+    padding-top: 5px;
+}
+
+body .ui-datatable .ui-datatable-data > tr > td {
+    border-width: 0;
 }

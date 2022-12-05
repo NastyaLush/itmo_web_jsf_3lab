@@ -126,7 +126,6 @@ function changeSize() {
 
 document.querySelector(".graph").addEventListener(("click"), (event) => {
     let marginOfGraph = window.getComputedStyle(document.querySelector('body')).margin.slice(0, -2)
-    // console.log(margin)
     x = event.clientX - marginOfGraph;
     y = event.clientY - marginOfGraph;
     let newx = (x - 175) / (sizeOfSquare);

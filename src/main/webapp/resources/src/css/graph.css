@@ -1,14 +1,13 @@
 svg {
     display: grid;
     grid-area: graph;
-    stroke: rgba(0, 0, 0, 0.99);
-    /*fill: none;*/
+    stroke: rgb(255 241 241 / 99%);
     stroke-width: 0.5;
 }
 
 .axis text {
     font: 10px Verdana;
-    fill: black;
+    fill: #faf8f8;
 }
 
 .axis line {
@@ -17,6 +16,6 @@ svg {
 }
 
 #sector, polygon#triangle, rect#rect {
-    fill: #6495ed9c;
+    fill: #64c2ed9c;
     stroke: none;
 }

@@ -3,7 +3,6 @@ package com.example.demo.data;
 public enum ResultHit {
     HIT("hit"),
     LOSE("lose");
-
     ResultHit(String hit) {
     }
 

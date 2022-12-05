@@ -14,7 +14,7 @@ header{
 
 }
 h1{
-    color: #b3c2f59c;
+    color: #fbe5bcbd;
     margin: 10px 10px 6px 20px;
 
 }
@@ -41,13 +41,14 @@ h1{
 }
 
 .fog {
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 400px;
+    height: -webkit-fill-available;
     overflow: hidden;
-    /*background: url("background.jpg") center center;*/
+    z-index: -1;
     background-size: cover;
-    background-image: url("images/fog.png");
+    background-image: url("../pictures/fog.png");
 }
