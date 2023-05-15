@@ -30,7 +30,7 @@
             <p:slider styleClass="slider" for="x" minValue="-5" maxValue="5" step="0.1"/>
         </div>
         <div class="labels_y" id="y-group">
-            <label for="y">Change Y:</label>
+            <label >Change Y:</label>
             <p:inputNumber inputStyleClass="y" name="y" id="y" value="#{result.y}" decimalSeparator="." required="true"
                            validatorMessage=" y is not between the expected values of -5 and 3"
                            requiredMessage=" y is required" placeholder="from -5 till 3">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="labels_r" id="r-group">
-            <label for="r">Change R:</label>
+            <label >Change R:</label>
             <p:inputNumber inputStyleClass="r" name="r" id="r" value="#{result.r}" decimalSeparator="."
                            onchange="changeSize()" required="true"
                            validatorMessage=" r is not between the expected values of -5 and 3"
