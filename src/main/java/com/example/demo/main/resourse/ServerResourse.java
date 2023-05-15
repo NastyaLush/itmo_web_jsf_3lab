@@ -10,6 +10,7 @@ import com.example.demo.main.data.ResultRepository;
 import com.example.demo.main.data.ResultServiceImpl;
 import com.example.demo.main.data.RowResult;
 import com.example.demo.main.util.Check;
+import com.example.demo.main.util.Jwt;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,12 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -36,33 +36,39 @@ public class ServerResourse {
     private final UserRepository userRepository = new UserRepository();
     private final ResultServiceImpl resultService = new ResultServiceImpl(resultRepository);
     private final UserServiceImpl userService = new UserServiceImpl(userRepository);
+    private final Jwt jwt = new Jwt();
+    private long script_start;
     @GET
     @Path("/list")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getResults() {
-
-        return createResponse(Response.Status.OK, Response.Status.OK.getStatusCode(), "results retrieved", "", Map.of("results", resultService.getResult()));
-
-
+    public Response getResults(@HeaderParam("Auth_Token") String token) {
+        String login = jwt.decodeToken(token);
+        System.out.println(login);
+        return createResponse(Response.Status.OK, Response.Status.OK.getStatusCode(), "results retrieved", "", Map.of("results", resultService.getResult(login)));
     }
 
-    @GET
+    @POST
     @Path("/save")
-    public Response saveResult(RowResult result) {
-        return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "result created", "", Map.of("result", resultService.saveResult(Check.getResult(result))));
-
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response saveResult(@HeaderParam("Auth_Token") String token, RowResult result) {
+        System.out.println("SAVE METHOD");
+        script_start = new Date().getTime();
+        String login = jwt.decodeToken(token);
+        System.out.println(login);
+//        RowResult result = new RowResult(1,1,1);
+        return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "result created", "", Map.of("result", resultService.saveResult(Check.getResult(result), login, script_start)));
 
     }
 
-    @GET
+    @POST
     @Path("/auth")
     public Response auth(User user) {
         Status status = userService.authorised(user);
         switch (status) {
             case SUCCESS -> {
-                return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully auth", String.valueOf(status));
-
+                return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully auth", String.valueOf(status), jwt.createToken(user.getLogin()));
             }
             case WRONG_PASSWORD -> {
                 return createResponse(Response.Status.FORBIDDEN, Response.Status.FORBIDDEN.getStatusCode(), "wrong password", String.valueOf(status));
@@ -76,13 +82,13 @@ public class ServerResourse {
         }
     }
 
-    @GET
+    @POST
     @Path("/register")
     public Response register(User user) {
         Status status = userService.register(user);
         switch (status) {
             case SUCCESS -> {
-                return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully registered", String.valueOf(status));
+                return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully registered", String.valueOf(status), jwt.createToken(user.getLogin()));
             }
             case THIS_LOGIN_ALREADY_EXIST -> {
                 return createResponse(Response.Status.FORBIDDEN, Response.Status.FORBIDDEN.getStatusCode(), "this login already exist", String.valueOf(status));
@@ -92,42 +98,27 @@ public class ServerResourse {
             }
         }
     }
-    private Response createResponse(Response.Status status, int statusCode, String msg, String devMsg, Map<?, ?> data){
+
+    private String createJson(MyResponse response){
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        String json = null;
+        String json;
         try {
-            json = objectMapper.writeValueAsString(new MyResponse(status, statusCode, msg, devMsg, data));
+            json = objectMapper.writeValueAsString(response);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println(json);
-
-        return Response.ok(json, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers",
-                        "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods",
-                        "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
+        return json;
+    }
+    private Response createResponse(Response.Status status, int statusCode, String msg, String devMsg, Map<?, ?> data){
+        return Response.ok(createJson(new MyResponse(status, statusCode, msg, devMsg, data)), MediaType.APPLICATION_JSON).build();
+    }
+    private Response createResponse(Response.Status status, int statusCode, String msg, String devMsg, String token){
+        return Response.ok(createJson(new MyResponse(status, statusCode, msg, devMsg)), MediaType.APPLICATION_JSON).header("Auth_Token", token).build();
     }
     private Response createResponse(Response.Status status, int statusCode, String msg, String devMsg){
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        String json = null;
-        try {
-            json = objectMapper.writeValueAsString(new MyResponse(status, statusCode, msg, devMsg));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(json);
-
-        return Response.ok(json, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers",
-                        "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods",
-                        "GET, POST, PUT, DELETE, OPTIONS, HEAD").build();
+        return Response.ok(createJson(new MyResponse(status, statusCode, msg, devMsg)), MediaType.APPLICATION_JSON).build();
     }
 }

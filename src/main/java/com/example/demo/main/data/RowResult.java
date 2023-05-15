@@ -1,9 +1,21 @@
 package com.example.demo.main.data;
 
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Builder
 public class RowResult {
     private double x;
     private double y;
     private double r;
+
+    public RowResult(double x, double y, double r) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+    }
 
     public double getX() {
         return x;

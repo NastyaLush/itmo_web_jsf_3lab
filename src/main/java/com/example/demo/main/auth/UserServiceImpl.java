@@ -1,6 +1,7 @@
 package com.example.demo.main.auth;
 
 import jakarta.transaction.Transactional;
+import org.postgresql.util.PSQLException;
 
 
 @Transactional
@@ -22,10 +23,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Status authorised(User user) {
-        if(!isAuthenticated(user)){
+        if (!isAuthenticated(user)) {
             return Status.THIS_LOGIN_IS_NOT_EXIST;
         }
-        if(!userRepository.exists(user)){
+        if (!userRepository.exists(user)) {
             return Status.WRONG_PASSWORD;
         }
         return Status.SUCCESS;

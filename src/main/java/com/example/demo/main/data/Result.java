@@ -1,41 +1,17 @@
 package com.example.demo.main.data;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.AUTO;
-
-@Entity
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@Table
+@MappedSuperclass
 public class Result {
-    @Id
-    @GeneratedValue(strategy = AUTO)
-    private long id;
+
     private double x;
     private double y;
     private double r;
     private Conclusion conclusion;
     private LocalDateTime date;
     private long scriptTime;
-
-    public Result(long id, double x, double y, double r, Conclusion conclusion, LocalDateTime date, long scriptTime) {
-        this.id = id;
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.conclusion = conclusion;
-        this.date = date;
-        this.scriptTime = scriptTime;
-    }
 
     public Result(double x, double y, double r, Conclusion conclusion, LocalDateTime date, long scriptTime) {
         this.x = x;
@@ -46,17 +22,13 @@ public class Result {
         this.scriptTime = scriptTime;
     }
 
+
+
     public Result() {
 
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public double getX() {
         return x;
@@ -90,7 +62,10 @@ public class Result {
         this.conclusion = conclusion;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
+        return date.toString();
+    }
+    public LocalDateTime getNormalDate() {
         return date;
     }
 
@@ -109,7 +84,6 @@ public class Result {
     @Override
     public String toString() {
         return "Result{" +
-                "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
                 ", r=" + r +

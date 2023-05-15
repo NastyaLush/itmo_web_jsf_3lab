@@ -10,6 +10,6 @@ public class ConfigurationUtil {
         return new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Result.class).buildSessionFactory();
     }
     public static SessionFactory getUserManager() {
-        return new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
+        return new Configuration().configure("hibernate-user.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
     }
 }

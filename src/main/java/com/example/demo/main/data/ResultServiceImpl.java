@@ -3,6 +3,8 @@ package com.example.demo.main.data;
 import jakarta.transaction.Transactional;
 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Transactional
 public class ResultServiceImpl implements ResultService {
@@ -13,15 +15,15 @@ public class ResultServiceImpl implements ResultService {
         this.resultRepository = resultRepository;
     }
     @Override
-    public List<Result> getResult(){
+    public List<Result> getResult(String token){
         System.out.println("get all results");
-        System.out.println(resultRepository.findAll());
-        return resultRepository.findAll();
+        return token!=null?resultRepository.findAll(token):new ArrayList<>();
     }
     @Override
-    public Result saveResult(Result result){
+    public Result saveResult(Result result, String token, long scriptStart){
         System.out.println("add new result: "+result);
-        return resultRepository.save(result);
+        result.setScriptTime(new Date().getTime()-scriptStart);
+        return (token!=null && result!=null)?resultRepository.save(result, token):null;
     }
 
 }
