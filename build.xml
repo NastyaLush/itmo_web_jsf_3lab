@@ -1,0 +1,147 @@
+<project name="web33" default="compile" basedir=".">
+
+    <property file="build.properties"/>
+    <macrodef name="git_commit">
+        <attribute name="file"/>
+        <sequential>
+            <exec executable="git">
+                <arg value="add"/>
+                <arg value="@{file}"/>
+            </exec>
+            <exec executable="git">
+                <arg value="commit"/>
+                <arg value="-m"/>
+                <arg value="Tests was successfully completed"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <path id="build.classpath">
+        <fileset dir="${lib.main}" includes="**/*.jar"/>
+    </path>
+
+    <path id="build.test.classpath">
+        <fileset dir="${lib.test}" includes="**/*.jar"/>
+    </path>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <echo>--------Init successfully finished---------</echo>
+    </target>
+
+    <target name="clean" description="Clean the output directory">
+        <delete dir="${build}"/>
+        <delete dir="${build.output.test.dir}"/>
+        <delete dir="${test_report}"/>
+    </target>
+
+    <target name="compile" depends="init"
+            description="compile the source">
+        <echo>-------Compile main code--------</echo>
+        <mkdir dir="${build.output.dir}"/>
+        <javac srcdir="${main}" destdir="${build.output.dir}" nowarn="false">
+            <classpath refid="build.classpath"/>
+        </javac>
+        <copy todir="${build.output.dir}">
+            <fileset dir="${build.resourceDir.0}"/>
+        </copy>
+        <copy todir="${build.output.dir}">
+            <fileset dir="${build.resourceDir.1}"/>
+        </copy>
+        <echo>-------Compile test code--------</echo>
+        <mkdir dir="${build.output.test.dir}"/>
+        <javac srcdir="${test}" destdir="${build.output.test.dir}" nowarn="false"
+               debug="true"
+               optimize="false"
+               deprecation="true"
+               target="16"
+               verbose="false"
+               fork="false"
+               source="16">
+            <classpath refid="build.test.classpath"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile" description="Package the application">
+        <mkdir dir="${build.fileName.web-inf.lib}"/>
+        <echo>copy lib</echo>
+        <echo>------start build---------</echo>
+        <copy todir="${build.fileName.web-inf.lib}">
+            <path refid="build.classpath"/>
+        </copy>
+        <copy todir="${build.fileName.web-inf.lib.classes}">
+            <fileset dir="${build.output.dir}"/>
+        </copy>
+        <copy todir="${build.fileName.web-inf}">
+            <fileset dir="${web-inf}"/>
+        </copy>
+        <copy todir="${build.fileName.path}">
+            <fileset dir="${webapp}">
+                <exclude name="${web-inf}/**"/>
+            </fileset>
+        </copy>
+        <echo>--------Creating war-archive...----------</echo>
+        <property name="jar" value="${build}/${ant.project.name}.jar"/>
+        <jar destfile="${jar}">
+            <fileset dir="${build.fileName.path}"/>
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="test"
+            depends="build"
+            description="Run the test cases">
+        <echo>-----------Begin executing test classes----------</echo>
+        <mkdir dir="${test_report}"/>
+        <junit printSummary="yes" failureproperty="tests_failed">
+            <formatter type="xml"/>
+            <classpath>
+                <path refid="build.test.classpath"/>
+                <pathelement location="${build.output.dir}"/>
+                <pathelement location="${build.output.test.dir}"/>
+            </classpath>
+            <batchtest fork="yes" todir="${test_report}">
+                <path refid="build.test.classpath"/>
+                <fileset dir="${build.testDir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+    </target>
+
+
+    <target name="report" depends="test" unless="tests_failed">
+        <echo>--------Tests was completed successfully!-------</echo>
+        <echo>--------Begin making report and commit...-------</echo>
+        <junitreport todir="${test_report}">
+            <fileset dir="${test_report}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+        </junitreport>
+        <git_commit file="${report_path}"/>
+    </target>
+    <target name="scp" depends="build">
+        <echo>--------executing scp command-------</echo>
+        <scp password="${env.password}" port="${env.port}" file="${build}/${ant.project.name}.jar" toDir="${remote.dir}"
+             trust="true"/>
+    </target>
+    <target name="xml">
+        <echo>--------validating xml-------</echo>
+        <xmlvalidate failonerror="no" lenient="yes" warn="yes">
+            <fileset dir="${webapp}" includes="*.xhtml"/>
+            <fileset dir="${web-inf}" includes="*.xml"/>
+        </xmlvalidate>
+    </target>
+
+    <target name="env" depends="scp">
+        <echo>--------executing env command-------</echo>
+        <sshexec host="${env.host}"
+                 username="${env.user}"
+                 password="${env.password}"
+                 port="${env.port}"
+                 trust="true"
+                 command="sh ${env.script}"/>
+    </target>
+
+</project>
