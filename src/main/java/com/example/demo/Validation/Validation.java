@@ -1,4 +1,4 @@
-package com.example.demo.Validation;
+package com.example.demo.validation;
 
 import com.example.demo.data.Result;
 import com.example.demo.data.ResultHit;

@@ -7,7 +7,7 @@ import org.hibernate.cfg.Configuration;
 
 public class ConfigurationUtil {
     public static SessionFactory getResultManager() {
-        return new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Result.class).buildSessionFactory();
+        return new Configuration().configure("src/main/resources/hibernate.cfg.xml").addAnnotatedClass(Result.class).buildSessionFactory();
     }
     public static SessionFactory getUserManager() {
         return new Configuration().configure("hibernate-user.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();

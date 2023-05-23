@@ -4,15 +4,15 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
+          <unit-entry name="hibernate-user.cfg.xml" />
           <unit-entry name="hibernate.cfg.xml" value="2c0bc8b3-f00a-4492-9c91-e4a118d758e5" />
+          <unit-entry name="src:main:webapp:WEB-INF:classes:hibernate-user.cfg.xml" />
           <unit-entry name="src:main:webapp:WEB-INF:classes:hibernate.cfg.xml" />
           <unit-entry name="src:main:webapp:WEB-INF:hibernate.cfg.xml" value="2118d161-5ad6-45a7-989e-8a9dc387d395" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/classes/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/hibernate.cfg.xml" />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/webapp/resources/hibernate.cfg.xml" />
+        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/classes/hibernate-user.cfg.xml" />
       </configuration>
     </facet>
   </component>

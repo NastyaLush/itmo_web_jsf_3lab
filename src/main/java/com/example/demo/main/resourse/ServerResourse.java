@@ -67,16 +67,16 @@ public class ServerResourse {
     public Response auth(User user) {
         Status status = userService.authorised(user);
         switch (status) {
-            case SUCCESS -> {
+            case SUCCESS : {
                 return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully auth", String.valueOf(status), jwt.createToken(user.getLogin()));
             }
-            case WRONG_PASSWORD -> {
+            case WRONG_PASSWORD : {
                 return createResponse(Response.Status.FORBIDDEN, Response.Status.FORBIDDEN.getStatusCode(), "wrong password", String.valueOf(status));
             }
-            case THIS_LOGIN_IS_NOT_EXIST -> {
+            case THIS_LOGIN_IS_NOT_EXIST : {
                 return createResponse(Response.Status.FORBIDDEN, Response.Status.FORBIDDEN.getStatusCode(), "this login is not exist", String.valueOf(status));
             }
-            default -> {
+            default : {
                 return createResponse(Response.Status.BAD_REQUEST, Response.Status.BAD_REQUEST.getStatusCode(), "this status doesn't exist", String.valueOf(status));
             }
         }
@@ -87,13 +87,13 @@ public class ServerResourse {
     public Response register(User user) {
         Status status = userService.register(user);
         switch (status) {
-            case SUCCESS -> {
+            case SUCCESS : {
                 return createResponse(Response.Status.CREATED, Response.Status.CREATED.getStatusCode(), "user successfully registered", String.valueOf(status), jwt.createToken(user.getLogin()));
             }
-            case THIS_LOGIN_ALREADY_EXIST -> {
+            case THIS_LOGIN_ALREADY_EXIST : {
                 return createResponse(Response.Status.FORBIDDEN, Response.Status.FORBIDDEN.getStatusCode(), "this login already exist", String.valueOf(status));
             }
-            default -> {
+            default : {
                 return createResponse(Response.Status.BAD_REQUEST, Response.Status.BAD_REQUEST.getStatusCode(), "this status doesn't exist", String.valueOf(status));
             }
         }

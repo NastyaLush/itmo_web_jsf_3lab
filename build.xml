@@ -40,15 +40,20 @@
             description="compile the source">
         <echo>-------Compile main code--------</echo>
         <mkdir dir="${build.output.dir}"/>
-        <javac srcdir="${main}" destdir="${build.output.dir}" nowarn="false">
+        <javac srcdir="${main}" destdir="${build.output.dir}"  nowarn="false"
+               debug="true"
+               optimize="false"
+               deprecation="true"
+               target="16"
+               verbose="false"
+               fork="false"
+               source="16">
             <classpath refid="build.classpath"/>
         </javac>
-        <copy todir="${build.output.dir}">
-            <fileset dir="${build.resourceDir.0}"/>
-        </copy>
-        <copy todir="${build.output.dir}">
-            <fileset dir="${build.resourceDir.1}"/>
-        </copy>
+
+<!--        <copy todir="${build.output.dir}">-->
+<!--            <fileset dir="${build.resourceDir.1}"/>-->
+<!--        </copy>-->
         <echo>-------Compile test code--------</echo>
         <mkdir dir="${build.output.test.dir}"/>
         <javac srcdir="${test}" destdir="${build.output.test.dir}" nowarn="false"
@@ -59,12 +64,16 @@
                verbose="false"
                fork="false"
                source="16">
-            <classpath refid="build.test.classpath"/>
+
+            <classpath>
+                <path refid="build.test.classpath"/>
+                <pathelement location="${build.output.dir}"/>
+            </classpath>
         </javac>
     </target>
 
     <target name="build" depends="compile" description="Package the application">
-        <mkdir dir="${build.fileName.web-inf.lib}"/>
+       <mkdir dir="${build.fileName.web-inf.lib}"/>
         <echo>copy lib</echo>
         <echo>------start build---------</echo>
         <copy todir="${build.fileName.web-inf.lib}">
@@ -76,19 +85,22 @@
         <copy todir="${build.fileName.web-inf}">
             <fileset dir="${web-inf}"/>
         </copy>
+        <copy todir="${build.fileName.web-inf.lib.classes}">
+            <fileset dir="${build.resourceDir.0}"/>
+        </copy>
         <copy todir="${build.fileName.path}">
             <fileset dir="${webapp}">
                 <exclude name="${web-inf}/**"/>
             </fileset>
         </copy>
         <echo>--------Creating war-archive...----------</echo>
-        <property name="jar" value="${build}/${ant.project.name}.jar"/>
-        <jar destfile="${jar}">
+
+        <war destfile="${build}/demo-1.0-SNAPSHOT.war">
             <fileset dir="${build.fileName.path}"/>
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
-        </jar>
+        </war>
     </target>
 
     <target name="test"
@@ -96,7 +108,7 @@
             description="Run the test cases">
         <echo>-----------Begin executing test classes----------</echo>
         <mkdir dir="${test_report}"/>
-        <junit printSummary="yes" failureproperty="tests_failed">
+        <junit haltonfailure="yes" printSummary="yes" failureproperty="tests_failed">
             <formatter type="xml"/>
             <classpath>
                 <path refid="build.test.classpath"/>
@@ -121,11 +133,6 @@
         </junitreport>
         <git_commit file="${report_path}"/>
     </target>
-    <target name="scp" depends="build">
-        <echo>--------executing scp command-------</echo>
-        <scp password="${env.password}" port="${env.port}" file="${build}/${ant.project.name}.jar" toDir="${remote.dir}"
-             trust="true"/>
-    </target>
     <target name="xml">
         <echo>--------validating xml-------</echo>
         <xmlvalidate failonerror="no" lenient="yes" warn="yes">
@@ -134,14 +141,14 @@
         </xmlvalidate>
     </target>
 
-    <target name="env" depends="scp">
+    <target name="env" depends="build">
         <echo>--------executing env command-------</echo>
-        <sshexec host="${env.host}"
-                 username="${env.user}"
-                 password="${env.password}"
-                 port="${env.port}"
-                 trust="true"
-                 command="sh ${env.script}"/>
-    </target>
+        <copy file="${build}/demo-1.0-SNAPSHOT.war" toDir="${env.deployments}" />
+        <exec dir="${env.dir}" executable="${env.script}">
+            <env key="JAVA_HOME" path="${java.17}" />
+            <env key="JAVA_OPTS" value="${jvm.args}" />
+        </exec>
+
+ </target>
 
 </project>

@@ -1,6 +1,17 @@
 # Project exclude paths
 /target/
+/node_modules
+/build
+/.idea
 /src/main/webapp/WEB-INF/oidc.json
 /src/main/webapp/resources/hibernate.cfg.xml
 /src/main/webapp/resources/oidc.json
 /src/main/webapp/WEB-INF/hibernate.cfg.xml
+/src/main/webapp/resources/src/hibernate.cfg.xml
+/src/main/webapp/resources/src/hibernate-user.cfg.xml
+/src/main/webapp/WEB-INF/classes/hibernate-user.cfg.xml
+/src/main/webapp/WEB-INF/classes/hibernate.cfg.xml
+/src/main/resources/hibernate-user.cfg.xml
+/src/main/resources/hibernate.cfg.xml
+/test_report
+/src/main/resources
