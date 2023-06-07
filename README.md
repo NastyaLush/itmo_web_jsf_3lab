@@ -1,4 +1,4 @@
-# web3itmo
+# web_jsf
 ![image](https://user-images.githubusercontent.com/95052885/204139518-3d649ae6-6484-4f90-8456-019a44168ca5.png)
 
 
