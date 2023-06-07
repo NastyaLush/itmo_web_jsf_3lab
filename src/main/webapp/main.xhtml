@@ -5,13 +5,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <h:outputStylesheet library="src" name="css/graph.css"/>
-    <link rel="stylesheet" href="resources/src/css/main.css"/>
+    <h:outputStylesheet library="css" name="graph.css"/>
+    <link rel="stylesheet" href="resources/css/main.css"/>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="resources/src/css/graph.css"/>
-    <link href="resources/src/css/toast.min.css" rel="stylesheet"/>
-    <script src="resources/src/js/toast.min.js"></script>
-
+    <link rel="stylesheet" href="resources/css/graph.css"/>
+    <link href="resources/css/toast.min.css" rel="stylesheet"/>
+    <script src="resources/js/toast.min.js"></script>
+    <h:outputScript library="js" name="graph.js" target="body"/>
 </h:head>
 <h:body>
     <div id="module-graph" class="module-graph"/>
@@ -43,9 +43,10 @@
         <div class="labels_r" id="r-group">
             <label for="r">Change R:</label>
             <p:inputNumber inputStyleClass="r" name="r" id="r" value="#{result.r}" decimalSeparator="."
-                           onchange="changeSize()" required="true"
+                           required="true"
                            validatorMessage=" r is not between the expected values of -5 and 3"
                            requiredMessage=" r is required" placeholder="from 2 till 5">
+                <f:ajax event="change" onevent="changeSize" listener="#{squareUtil.updateRadius(result.r)}"/>
                 <f:validateDoubleRange minimum="2" maximum="5"/>
             </p:inputNumber>
             <br/>
@@ -91,11 +92,9 @@
     </p:dataTable>
 
     <p:remoteCommand name="setResultFromGraph" action="#{userData.setResultFromGraph()}" update="table"
-                     process="@this" oncomplete="setDots()"/>
-
+                     process="@this" />
     <div class="fog">
         <div></div>
     </div>
-    <script src="resources/src/js/graph.js"/>
 </h:body>
 </html>

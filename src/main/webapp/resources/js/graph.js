@@ -112,6 +112,9 @@ function changeSize() {
         .attr("height", sizeOfSquare * radius);
     triangle.attr("points", x1 + ",175" + " 175,175 " + "175," + y2);
     svg.selectAll("path.sector").remove()
+    svg.selectAll("circle.dot").remove()
+    svg.selectAll("circle.error_dot").remove()
+
     const arcGenerator = d3.arc()
         .outerRadius(sizeOfSquare * radius / 2)
         .innerRadius(0)
@@ -122,21 +125,13 @@ function changeSize() {
         .attr("id", "sector")
         .attr("transform", "translate(175,175)")
         .attr("d", arcGenerator());
+
 }
 
 document.querySelector(".graph").addEventListener(("click"), (event) => {
     let marginOfGraph = window.getComputedStyle(document.querySelector('body')).margin.slice(0, -2)
     x = event.clientX - marginOfGraph;
     y = event.clientY - marginOfGraph;
-    let newx = (x - 175) / (sizeOfSquare);
-    let newy = (175 - y) / (sizeOfSquare);
-    console.log("sizeOfSquare: " + sizeOfSquare)
-    console.log("marginOfGraph: " + marginOfGraph)
-    console.log("margin: " + margin)
-    console.log("y: " + y)
-
-    console.log("ddddd")
-
     r = document.getElementById("form:r_hinput").value
     if (r < 2 || r > 5) {
         new Toast({
@@ -148,16 +143,21 @@ document.querySelector(".graph").addEventListener(("click"), (event) => {
         });
         return;
     }
+    if (y < 30 || y > height - margin || x < 30 || x > width - margin) {
+        return;
+    }
 
+    setDot(event.clientX, event.clientY, r)
+    console.log("execute method on server side", getUserX(x).toString(), getUserY(y).toString(),  r.toString())
     setResultFromGraph(
         [
             {
                 name: "x",
-                value: newx.toString()
+                value: getUserX(x).toString()
             },
             {
                 name: "y",
-                value: newy.toString()
+                value: getUserY(y).toString()
             },
             {
                 name: "r",
@@ -168,30 +168,52 @@ document.querySelector(".graph").addEventListener(("click"), (event) => {
 
 })
 
-function setDots() {
-    let items = document.getElementById("table_data").childNodes
-    items[0].childNodes.forEach((e) => {
-
-        if (e.childNodes[0].childNodes.length > 0 && e.childNodes[0].classList.value == "result") {
-            setDot(x, y, r, e.childNodes[0].childNodes[0])
-        }
-    });
-}
-
-function setDot(x, y, r, result) {
+function setDot(x, y, r) {
     let rad = 2;
+    console.log(x, y, r)
 
-    if (result.textContent.trim() == "HIT") {
+    if (isHIT(getUserX(x), getUserY(y), r)) {
+        console.log("green")
         svg.append("circle")
             .attr("class", "dot")
             .attr("cx", x)
             .attr("cy", y)
             .attr("r", rad);
     } else {
+        console.log("red")
         svg.append("circle")
             .attr("class", "error_dot")
             .attr("cx", x)
             .attr("cy", y)
             .attr("r", rad);
     }
+}
+
+function getUserX(x) {
+    return (x - 175) / (sizeOfSquare)
+}
+
+function getUserY(y) {
+    return (175 - y) / (sizeOfSquare)
+}
+
+function isHIT(x, y, r) {
+    return isInRectangle(x, y, r) || isInTriangle(x, y, r) || isInSector(x, y, r)
+}
+
+function isInTriangle(x, y, r) {
+    return between(x, -r, 0) && between(y, -r - x, 0);
+
+}
+
+function between(x, left, right) {
+    return x >= left && x <= right;
+}
+
+function isInRectangle(x, y, r) {
+    return between(x, 0, r / 2) && between(y, -r, 0);
+}
+
+function isInSector(x, y, r) {
+    return between(x, 0, r / 2) && between(y, 0, Math.sqrt(Math.pow(r / 2, 2) - Math.pow(x, 2)));
 }

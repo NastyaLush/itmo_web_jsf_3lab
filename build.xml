@@ -123,16 +123,6 @@
     </target>
 
 
-    <target name="report" depends="test" unless="tests_failed">
-        <echo>--------Tests was completed successfully!-------</echo>
-        <echo>--------Begin making report and commit...-------</echo>
-        <junitreport todir="${test_report}">
-            <fileset dir="${test_report}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-        </junitreport>
-        <git_commit file="${report_path}"/>
-    </target>
     <target name="xml">
         <echo>--------validating xml-------</echo>
         <xmlvalidate failonerror="no" lenient="yes" warn="yes">
@@ -148,7 +138,5 @@
             <env key="JAVA_HOME" path="${java.17}" />
             <env key="JAVA_OPTS" value="${jvm.args}" />
         </exec>
-
  </target>
-
 </project>

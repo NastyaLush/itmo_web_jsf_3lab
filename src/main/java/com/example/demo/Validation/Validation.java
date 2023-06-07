@@ -2,20 +2,16 @@ package com.example.demo.validation;
 
 import com.example.demo.data.Result;
 import com.example.demo.data.ResultHit;
+import com.example.demo.mbean.PointManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Validation {
-    private boolean isValid = true;
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss ");
 
-    public Result checkResult(Result result, long time) {
-        if (!(between(result.getX(), -5, 5)
-                && between(result.getY(), -5, 3)
-                && between(result.getR(), 2, 5))) {
-            isValid = false;
-            return null;
-        }
+
+    public Result checkResult(Result result, long time, PointManager pointManager) {
         if (isInRectangle(result.getX(), result.getY(), result.getR()) ||
                 isInTriangle(result.getX(), result.getY(), result.getR()) ||
                 isInSector(result.getX(), result.getY(), result.getR())) {
@@ -29,7 +25,7 @@ public class Validation {
 
         result.setDate(formatter.format(new Date(System.currentTimeMillis())));
         result.setTimeScript(Math.floor((System.nanoTime() - time) / (Math.pow(10, 3))) / 1000);
-
+        pointManager.onClick(result);
         return result;
     }
 
